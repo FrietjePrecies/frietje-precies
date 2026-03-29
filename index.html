@@ -12,7 +12,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
     <style>
-        :root { --retro-creme: #fcf9f2; --retro-oranje: #e68a00; --retro-rood: #c21807; --donker-tekst: #2c2a29; --licht-grijs: #f4f4f4; --succes-groen: #2ecc71; }
+        :root { --retro-creme: #fcf9f2; --retro-oranje: #e68a00; --retro-rood: #c21807; --donker-tekst: #2c2a29; --licht-grijs: #f4f4f4; --succes-groen: #2ecc71; --goud-geel: #ffc107; }
         html { scroll-behavior: smooth; }
         body { font-family: 'Montserrat', sans-serif; background-color: var(--retro-creme); color: var(--donker-tekst); margin: 0; padding: 0; overflow-x: hidden; }
         h1, h2, h3, h4, .logo-text { font-family: 'Lobster', cursive; color: var(--retro-oranje); letter-spacing: 1.5px; margin-top: 0; }
@@ -67,6 +67,16 @@
         #admin-panel { background: #e0e0e0; padding: 60px 20px; border-top: 10px solid #333; }
         .order-card { background: white; border-left: 8px solid var(--retro-oranje); padding: 20px; margin-bottom: 15px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .order-header { display: flex; justify-content: space-between; border-bottom: 2px dashed #eee; padding-bottom: 10px; margin-bottom: 10px; }
+        
+        /* FOOTER STYLING TERUGGEZET */
+        footer { background-color: var(--donker-tekst); color: white; padding: 80px 20px 30px 20px; border-top: 8px solid var(--retro-rood);}
+        .footer-grid { max-width: 1150px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 60px; margin-bottom: 50px; }
+        .footer-col h4 { color: var(--goud-geel); font-size: 2em; margin-top: 0; margin-bottom: 25px; text-shadow: none;}
+        .footer-col p, .footer-col li { color: #ddd; font-size: 1.05em; margin-bottom: 12px; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-tag { display: inline-block; background-color: var(--retro-oranje); color: var(--donker-tekst); font-weight: bold; padding: 5px 12px; border-radius: 5px; margin-top: 15px; font-size: 0.9em; text-transform: uppercase;}
+        .footer-bottom { text-align: center; border-top: 1px solid #444; padding-top: 30px; color: #888; font-size: 0.95em; }
+
         @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
         @media (max-width: 768px) { .order-grid { grid-template-columns: 1fr; } nav ul { display: none; } .hero h1 { font-size: 3.5em; } }
     </style>
@@ -158,13 +168,37 @@
         <button onclick="clearSystem()" style="display:block; margin:40px auto 0 auto; padding:10px 20px; background:#ccc; border:none; border-radius:5px; font-weight:bold; cursor:pointer;">Wis Alle Keuken Data</button>
     </section>
 
-    <footer style="background:var(--donker-tekst); color:white; padding:50px; text-align:center;">
-        <p>📍 Onderwijsboulevard 3, Den Bosch | KW1C Schoolproject</p>
+    <footer id="contact">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Locatie & Contact</h4>
+                <p>📍 Koning Willem I College</p>
+                <p>Onderwijsboulevard 3</p>
+                <p>5223 DG 's-Hertogenbosch</p>
+                <span class="footer-tag">Project Concept Store</span>
+            </div>
+            <div class="footer-col">
+                <h4>Openingstijden</h4>
+                <ul>
+                    <li>Maandag: Gesloten</li>
+                    <li>Dinsdag - Donderdag: 11:30 - 20:00</li>
+                    <li>Vrijdag: 11:30 - 21:00</li>
+                    <li>Zaterdag & Zondag: 12:00 - 21:00</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Over Frietje Precies</h4>
+                <p>Opgericht vanuit een passie voor kwaliteit en nauwkeurigheid. Wij brengen de sfeer van een Amerikaanse jaren '50 diner samen met de Hollandse liefde voor de perfecte puntzak friet.</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Frietje Precies - Concept ontwikkeld voor een schoolproject op het KW1C. Alle rechten voorbehouden.</p>
+        </div>
     </footer>
 
     <script>
         // =========================================================================
-        // 1. FIREBASE CONFIGURATIE (LIVE DATABASE!)
+        // 1. FIREBASE CONFIGURATIE (JOUW ECHTE GEGEVENS ZIJN INGEVULD!)
         // =========================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyAMxVandAaxV_4yvbXePt-UxlkIpXuKdOc",
@@ -211,6 +245,7 @@
             if (Object.keys(cart).length === 0) return alert("Je bestelling is leeg!");
             if (nameInput === "") return alert("Vul a.u.b. je naam in.");
 
+            // Maak een unieke ID
             const orderId = "FP-" + Math.floor(Math.random() * 9000 + 1000);
 
             const newOrder = {
@@ -222,7 +257,7 @@
                 timestamp: new Date().toLocaleTimeString()
             };
 
-            // STUUR NAAR FIREBASE!
+            // STUUR NAAR FIREBASE
             database.ref('keuken_orders/' + orderId).set(newOrder)
                 .then(() => {
                     alert(`Succes ${nameInput}! Je order (#${orderId}) is live naar de keuken gestuurd.`);
