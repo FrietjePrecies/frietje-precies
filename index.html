@@ -22,26 +22,26 @@
         nav .logo-text { font-size: 2.2em; text-decoration: none; color: var(--retro-rood); }
         nav ul { list-style: none; display: flex; gap: 25px; margin: 0; padding: 0; }
         nav ul li a { text-decoration: none; color: var(--donker-tekst); font-weight: 700; text-transform: uppercase; font-size: 0.9em; }
-        
         .cart-icon { background: var(--retro-rood); color: white; padding: 8px 15px; border-radius: 50px; font-weight: 800; cursor: pointer; text-decoration: none; display:flex; align-items:center; gap:8px;}
         
         #toast { position: fixed; top: 80px; right: -400px; background: var(--succes-groen); color: white; padding: 15px 25px; border-radius: 10px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.2); transition: 0.4s; z-index: 9999; }
         #toast.show { right: 20px; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; justify-content: center; align-items: center; z-index: 3000; backdrop-filter: blur(5px); }
-        .modal-box { background: white; width: 90%; max-width: 500px; border-radius: 20px; border: 5px solid var(--retro-oranje); overflow: hidden; transform: scale(0.9); transition: 0.3s; }
+        .modal-box { background: white; width: 95%; max-width: 500px; border-radius: 20px; border: 5px solid var(--retro-oranje); overflow: hidden; transform: scale(0.9); transition: 0.3s; }
         .modal-overlay.active { display: flex; } .modal-overlay.active .modal-box { transform: scale(1); }
         .modal-header { background: var(--retro-creme); padding: 20px; border-bottom: 2px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .modal-body { padding: 20px; max-height: 60vh; overflow-y: auto; }
         .option-group { margin-bottom: 20px; background: var(--licht-grijs); padding: 15px; border-radius: 10px; border: 1px solid #ddd; }
-        .option-group label { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; cursor: pointer; border-bottom: 1px dashed #ccc; }
+        .option-group h4 { margin: 0 0 10px 0; color: var(--retro-rood); font-family: 'Montserrat', sans-serif; font-size: 1em; }
+        .option-group label { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; cursor: pointer; border-bottom: 1px dashed #ccc; }
         .modal-footer { padding: 20px; background: white; border-top: 2px solid #eee; }
         .btn-confirm { width: 100%; padding: 15px; background: var(--retro-rood); color: white; border: none; border-radius: 10px; font-weight: 800; font-size: 1.2em; cursor: pointer; }
         
         .hero { margin-top: 70px; text-align: center; padding: 150px 20px; position: relative; overflow: hidden; color: white; border-bottom: 5px solid var(--retro-oranje); }
         .hero-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.4)), url('hero-diner.jpg') center/cover; z-index: 1; animation: kenBurns 35s infinite alternate ease-in-out; }
         .hero-content { position: relative; z-index: 2; max-width: 850px; margin: 0 auto; }
-        .hero h1 { font-size: 5em; text-shadow: 4px 4px 0px var(--retro-rood); }
+        .hero h1 { font-size: 5em; text-shadow: 4px 4px 0px var(--retro-rood); margin-bottom: 20px; }
         
         .menu-section { padding: 80px 20px; max-width: 1200px; margin: 0 auto; }
         .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; margin-top: 30px; }
@@ -52,7 +52,6 @@
         .order-section { background: var(--donker-tekst); color: white; padding: 80px 20px; }
         .order-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
         .glass-panel { background: white; color: var(--donker-tekst); padding: 40px; border-radius: 20px; border: 4px solid var(--retro-oranje); }
-        
         .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 15px 0; gap: 15px;}
         .cart-item-info { flex-grow: 1; word-wrap: break-word; overflow: hidden; }
         .cart-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -69,7 +68,7 @@
         .status-preorder { background: var(--retro-oranje); color: var(--donker-tekst); }
         
         #admin-panel { background: #e0e0e0; padding: 60px 20px; border-top: 10px solid #333; }
-        .order-card { background: white; border-left: 8px solid var(--retro-oranje); padding: 20px; margin-bottom: 15px; border-radius: 10px; }
+        .order-card { background: white; border-left: 8px solid var(--retro-oranje); padding: 20px; margin-bottom: 15px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         
         footer { background-color: var(--donker-tekst); color: white; padding: 80px 20px 30px 20px; border-top: 8px solid var(--retro-rood);}
         .footer-grid { max-width: 1150px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 60px; margin-bottom: 50px; }
@@ -79,7 +78,7 @@
         @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
         
         @media (max-width: 768px) { 
-            nav { padding: 12px 20px; } nav ul { display: none; } .hero h1 { font-size: 2.8em; } 
+            nav { padding: 12px 20px; } nav ul { display: none; } .hero h1 { font-size: 2.5em; } 
             .order-grid { grid-template-columns: 1fr; gap: 20px; } .glass-panel { padding: 20px; } 
             .cart-item { flex-wrap: wrap; } .cart-item-info { width: 100%; margin-bottom: 10px; }
         }
@@ -87,19 +86,19 @@
 </head>
 <body>
 
-    <div id="toast">✔ Toegevoegd!</div>
+    <div id="toast">✔ Toegevoegd aan dienblad!</div>
 
     <div class="modal-overlay" id="productModal">
         <div class="modal-box">
-            <div class="modal-header"><h3 id="modalTitle">Product</h3><button class="close-btn" onclick="closeModal()">×</button></div>
+            <div class="modal-header"><h3 id="modalTitle">Product</h3><button class="close-btn" style="border:none; background:none; font-size:1.5em; cursor:pointer;" onclick="closeModal()">×</button></div>
             <div class="modal-body" id="modalContent"></div>
-            <div class="modal-footer"><button class="btn-confirm" id="modalAddBtn" onclick="confirmAddToCart()">Toevoegen</button></div>
+            <div class="modal-footer"><button class="btn-confirm" id="modalAddBtn" onclick="confirmAddToCart()">Toevoegen aan dienblad</button></div>
         </div>
     </div>
 
     <nav>
         <a href="#home" class="logo-text">Frietje Precies ⚖️</a>
-        <ul><li><a href="#menu">Menu</a></li><li><a href="#ervaring">Route</a></li></ul>
+        <ul><li><a href="#menu">Ons Menu</a></li><li><a href="#ervaring">De Route</a></li></ul>
         <a href="#bestellen" class="cart-icon"><i class="fas fa-shopping-cart"></i> <span id="nav-cart-count">0</span></a>
     </nav>
 
@@ -107,8 +106,8 @@
         <div class="hero-bg"></div>
         <div class="hero-content">
             <h1>Precies op Smaak.</h1>
-            <p>Kies je snacks en koude dranken. Wij wegen alles tot op de laatste gram.</p>
-            <a href="#menu" style="text-decoration:none; padding:15px 35px; background:var(--retro-oranje); color:var(--donker-tekst); font-weight:900; border-radius:50px; border: 3px solid var(--donker-tekst);">Direct Bestellen</a>
+            <p>Stel je bestelling tot op de gram nauwkeurig samen. Wij wegen alles voor je af.</p>
+            <a href="#menu" style="text-decoration:none; padding:15px 35px; background:var(--retro-oranje); color:var(--donker-tekst); font-weight:900; border-radius:50px; border: 3px solid var(--donker-tekst);">Start Bestelling</a>
         </div>
     </header>
 
@@ -116,20 +115,21 @@
 
     <section id="menu" class="menu-section">
         <div class="menu-category">
-            <h3>🍟 Onze Friet & Burgers</h3>
+            <h3>🍟 Friet & Snacks</h3>
             <div class="menu-grid">
-                <div class="menu-item" onclick="openModal('friet')"><h4>Oud-Hollandse Puntzak</h4><p>250 gram perfecte frites.</p><div class="price-row"><span>€ 3,50</span><button class="btn-add">+</button></div></div>
-                <div class="menu-item" onclick="openModal('burger')"><h4>Classic Diner Burger</h4><p>Rundvlees, kaas & bacon.</p><div class="price-row"><span>€ 6,50</span><button class="btn-add">+</button></div></div>
-                <div class="menu-item" onclick="openModal('snack')"><h4>Ambachtelijke Snack</h4><p>Kroket of Frikandel.</p><div class="price-row"><span>€ 2,50</span><button class="btn-add">+</button></div></div>
-                <div class="menu-item" onclick="openModal('pulledchicken')"><h4>Friet Pulled Chicken</h4><p>Met BBQ saus en uien.</p><div class="price-row"><span>€ 7,50</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('friet')"><h4>Oud-Hollandse Puntzak</h4><p>250 gram perfecte frites.</p><div class="price-row"><span>V.a. € 3,50</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('burger')"><h4>Classic Diner Burger</h4><p>100% Rundvlees, cheddar, bacon.</p><div class="price-row"><span>V.a. € 6,50</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('snack')"><h4>Ambachtelijke Snack</h4><p>Kroket, Frikandel of Mexicano.</p><div class="price-row"><span>V.a. € 2,50</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('pulledchicken')"><h4>Friet Pulled Chicken</h4><p>Rijkelijk belegd met BBQ kip.</p><div class="price-row"><span>V.a. € 7,50</span><button class="btn-add">+</button></div></div>
             </div>
         </div>
         <div class="menu-category">
-            <h3>🥤 Dorstlessers</h3>
+            <h3>🥤 Shakes & Drinks</h3>
             <div class="menu-grid">
-                <div class="menu-item" onclick="openModal('shake')"><h4>Milkshake</h4><p>Premium dikke shake.</p><div class="price-row"><span>€ 3,00</span><button class="btn-add">+</button></div></div>
-                <div class="menu-item" onclick="openModal('soda')"><h4>Koude Soda</h4><p>Cola, Fanta, Sprite.</p><div class="price-row"><span>€ 2,50</span><button class="btn-add">+</button></div></div>
-                <div class="menu-item" onclick="openModal('warme_drank')"><h4>Koffie of Thee</h4><p>Vers gezet en warm.</p><div class="price-row"><span>€ 2,80</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('shake')"><h4>Premium Milkshake</h4><p>Dik, romig en koud.</p><div class="price-row"><span>€ 3,00</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('soda')"><h4>Koude Soda</h4><p>Cola, Fanta, Sprite, Dr. Pepper.</p><div class="price-row"><span>€ 2,50</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('bier')"><h4>Speciaalbier</h4><p>Duvel, Karmeliet of La Chouffe.</p><div class="price-row"><span>€ 4,50</span><button class="btn-add">+</button></div></div>
+                <div class="menu-item" onclick="openModal('warme_drank')"><h4>Warme Dranken</h4><p>Koffie, Muntthee of Cappuccino.</p><div class="price-row"><span>V.a. € 2,80</span><button class="btn-add">+</button></div></div>
             </div>
         </div>
     </section>
@@ -137,7 +137,7 @@
     <div class="checkerboard"></div>
 
     <section id="bestellen" class="order-section">
-        <h2 style="text-align:center; font-size:3.5em; margin-bottom: 50px; color:var(--retro-oranje);">Rond je Bestelling Af</h2>
+        <h2 style="text-align:center; font-size:3.5em; margin-bottom: 50px; color:var(--retro-oranje);">Jouw Bestelling</h2>
         <div class="order-grid">
             <div class="glass-panel">
                 <div id="shop-status" class="status-badge">Checken...</div>
@@ -147,17 +147,17 @@
             </div>
             <div class="glass-panel">
                 <h3>Ophalen</h3>
-                <div class="form-group"><label>Naam: *</label><input type="text" id="custName" placeholder="Voor wie is de bestelling?" required></div>
+                <div class="form-group"><label>Naam: *</label><input type="text" id="custName" placeholder="Jouw Naam" required></div>
                 <div class="form-group"><label>Ophaaldag: *</label><select id="pickupDay" onchange="generateTimes()"></select></div>
                 <div class="form-group"><label>Ophaaltijd: *</label><select id="pickupTime"></select></div>
-                <div class="form-group"><label>Opmerking:</label><input type="text" id="custNotes" placeholder="Bijv. Geen zout"></div>
+                <div class="form-group"><label>Opmerking voor de keuken:</label><input type="text" id="custNotes" placeholder="Bijv. Alles in één tas aub"></div>
                 <button id="checkoutBtn" class="btn-checkout" onclick="processCheckout()">Bestelling Plaatsen</button>
             </div>
         </div>
     </section>
 
     <section id="ervaring" style="text-align:center; padding: 100px 20px; background:white;">
-        <h2 style="font-size: 3em;">De Winkel Layout</h2>
+        <h2 style="font-size: 3em;">De Route & Flow</h2>
         <img src="plattegrond.jpg" alt="Plattegrond" style="width:100%; max-width:900px; border-radius:15px; border:6px solid var(--donker-tekst);">
     </section>
 
@@ -175,7 +175,7 @@
     </footer>
 
     <script>
-        // --- 1. DATABASE CONFIG ---
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyAMxVandAaxV_4yvbXePt-UxlkIpXuKdOc",
             authDomain: "frietje-precies-kw1c.firebaseapp.com",
@@ -189,18 +189,49 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // --- 2. MENU DATA ---
+        // DE VOLLEDIGE MENU DATABASE (ALLE OPTIES HERSTELD)
         const menuData = {
-            'friet': { name: 'Oud-Hollandse Puntzak', basePrice: 3.50, options: [{ title: 'Saus:', type: 'radio', choices: [{label:'Geen saus', price:0}, {label:'Mayo', price:0.60}, {label:'Speciaal', price:1.00}] }] },
-            'burger': { name: 'Classic Burger', basePrice: 6.50, options: [{ title: 'Opties:', type: 'radio', choices: [{label:'Alleen Burger', price:0}, {label:'Menu (+ Friet)', price:4.10}] }] },
-            'snack': { name: 'Snack', basePrice: 2.50, options: [{ title: 'Soort:', type: 'radio', choices: [{label:'Kroket', price:0}, {label:'Frikandel', price:0}] }] },
-            'pulledchicken': { name: 'Friet Pulled Chicken', basePrice: 7.50, options: [{ title: 'Extra:', type: 'checkbox', choices: [{label:'Extra Jalapeños', price:0.50}] }] },
-            'shake': { name: 'Milkshake', basePrice: 3.00, options: [{ title: 'Smaak:', type: 'radio', choices: [{label:'Vanille', price:0}, {label:'Aardbei', price:0}, {label:'Choco', price:0}] }] },
-            'soda': { name: 'Soda', basePrice: 2.50, options: [{ title: 'Merk:', type: 'radio', choices: [{label:'Cola', price:0}, {label:'Fanta', price:0}, {label:'Sprite', price:0}] }] },
-            'warme_drank': { name: 'Warme Drank', basePrice: 2.80, options: [{ title: 'Keuze:', type: 'radio', choices: [{label:'Koffie (Zwart)', price:0}, {label:'Thee', price:0}, {label:'Cappuccino', price:0.40}] }] }
+            'friet': { 
+                name: 'Oud-Hollandse Puntzak', basePrice: 3.50, 
+                options: [ { title: 'Saus:', type: 'radio', choices: [{label:'Geen saus', price:0}, {label:'Mayonaise', price:0.60}, {label:'Curry', price:0.60}, {label:'Speciaal (Mayo, Curry, Ui)', price:1.00}, {label:'Warme Pindasaus', price:1.20}] } ] 
+            },
+            'burger': { 
+                name: 'Classic Diner Burger', basePrice: 6.50, 
+                options: [ 
+                    { title: 'Maak er een Menu van:', type: 'radio', choices: [{label:'Alleen Burger', price:0}, {label:'Menu (+ Friet & Mayo)', price:4.10}] },
+                    { title: 'Ingrediënten weglaten:', type: 'checkbox', choices: [{label:'Zonder Cheddar', price:0}, {label:'Zonder Bacon', price:0}, {label:'Zonder Ui', price:0}, {label:'Zonder Augurk', price:0}] }
+                ] 
+            },
+            'snack': { 
+                name: 'Ambachtelijke Snack', basePrice: 2.50, 
+                options: [ 
+                    { title: 'Welke snack?', type: 'radio', choices: [{label:'Kroket', price:0}, {label:'Frikandel', price:0}, {label:'Mexicano', price:0.50}] },
+                    { title: 'Saus erbij?', type: 'radio', choices: [{label:'Geen saus', price:0}, {label:'Met Mayonaise', price:0.60}, {label:'Met Speciaal', price:1.00}] }
+                ] 
+            },
+            'pulledchicken': { 
+                name: 'Friet Pulled Chicken', basePrice: 7.50, 
+                options: [ { title: 'Extra:', type: 'checkbox', choices: [{label:'Extra Jalapeños', price:0.50}, {label:'Zonder BBQ saus', price:0}] } ] 
+            },
+            'shake': { 
+                name: 'Premium Milkshake', basePrice: 3.00, 
+                options: [ { title: 'Smaak:', type: 'radio', choices: [{label:'Vanille', price:0}, {label:'Aardbei', price:0}, {label:'Chocolade', price:0}, {label:'Banaan', price:0}] } ] 
+            },
+            'soda': { 
+                name: 'Koude Soda', basePrice: 2.50, 
+                options: [ { title: 'Welk merk?', type: 'radio', choices: [{label:'Coca-Cola', price:0}, {label:'Coca-Cola Zero', price:0}, {label:'Fanta Sinas', price:0}, {label:'Sprite', price:0}, {label:'Dr. Pepper', price:0}] } ] 
+            },
+            'bier': { 
+                name: 'Speciaalbier', basePrice: 4.50, 
+                options: [ { title: 'Keuze uit de tap:', type: 'radio', choices: [{label:'Duvel', price:0}, {label:'Tripel Karmeliet', price:0}, {label:'La Chouffe', price:0}] } ] 
+            },
+            'warme_drank': { 
+                name: 'Warme Drank', basePrice: 2.80, 
+                options: [ { title: 'Keuze:', type: 'radio', choices: [{label:'Koffie (Zwart)', price:0}, {label:'Vers Gezette Thee', price:0}, {label:'Cappuccino', price:0.40}, {label:'Latte Macchiato', price:0.60}] } ] 
+            }
         };
 
-        // --- 3. WINKELMANDJE & MODAL ---
+        // MODAL LOGICA
         let currentProduct = null;
         function openModal(id) {
             const p = menuData[id]; currentProduct = p;
@@ -209,7 +240,9 @@
             p.options.forEach((o, i) => {
                 h += `<div class="option-group"><h4>${o.title}</h4>`;
                 o.choices.forEach((c, ci) => {
-                    h += `<label><input type="${o.type}" name="opt${i}" value="${c.label}" data-price="${c.price}" onchange="updateModalPrice()" ${ci==0?'checked':''}> ${c.label} ${c.price>0?'+ €'+c.price.toFixed(2):''}</label>`;
+                    const type = o.type;
+                    const name = "optGroup" + i;
+                    h += `<label><input type="${type}" name="${name}" value="${c.label}" data-price="${c.price}" onchange="updateModalPrice()" ${ci==0?'checked':''}> ${c.label} ${c.price>0?'+ €'+c.price.toFixed(2):''}</label>`;
                 });
                 h += `</div>`;
             });
@@ -225,71 +258,52 @@
             return t; 
         }
         function confirmAddToCart() {
-            let opts = []; document.querySelectorAll('#modalContent input:checked').forEach(i => { if(i.value !== "Geen saus" && i.value !== "Alleen Burger") opts.push(i.value); });
+            let opts = []; document.querySelectorAll('#modalContent input:checked').forEach(i => { 
+                if(i.value !== "Geen saus" && i.value !== "Alleen Burger" && i.value !== "Alleen de burger") opts.push(i.value); 
+            });
             let key = currentProduct.name + (opts.length ? " | " + opts.join(', ') : "");
             addToCartLogic(key, currentProduct.name, opts.join(', '), updateModalPrice());
-            closeModal(); showToast("Toegevoegd!");
+            closeModal(); showToast("✔ Toegevoegd aan dienblad!");
         }
 
+        // WINKELMANDJE
         let cart = JSON.parse(localStorage.getItem('frietCartV3')) || {};
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
         function addToCartLogic(k, n, o, p) { if(cart[k]) cart[k].qty++; else cart[k] = { baseName:n, optionsText:o, price:p, qty:1 }; updateUI(); }
         function updateUI() { 
             const c = document.getElementById('cart-container'); let t = 0, ti = 0; c.innerHTML = ""; 
-            if(!Object.keys(cart).length) { c.innerHTML = "<p>Mandje is leeg...</p>"; document.getElementById('cart-total').innerText = "€ 0,00"; document.getElementById('nav-cart-count').innerText = "0"; return; } 
+            if(!Object.keys(cart).length) { c.innerHTML = "<p style='color:#888;'>Je dienblad is nog leeg.</p>"; document.getElementById('cart-total').innerText = "€ 0,00"; document.getElementById('nav-cart-count').innerText = "0"; return; } 
             for(let k in cart) { 
                 let d = cart[k], it = d.price * d.qty; t += it; ti += d.qty; 
-                c.innerHTML += `<div class="cart-item"><div class="cart-item-info"><strong>${d.baseName}</strong><br><small>${d.optionsText}</small></div><div class="cart-controls"><button onclick="changeQty('${k.replace(/'/g,"\\'")}',-1)">-</button> <strong>${d.qty}</strong> <button onclick="changeQty('${k.replace(/'/g,"\\'")}',1)">+</button></div><div class="cart-price-total">€${it.toFixed(2)}</div></div>`; 
+                c.innerHTML += `<div class="cart-item"><div class="cart-item-info"><strong>${d.baseName}</strong><br><small style="color:#666;">${d.optionsText}</small></div><div class="cart-controls"><button class="qty-btn" onclick="changeQty('${k.replace(/'/g,"\\'")}',-1)">-</button> <strong>${d.qty}</strong> <button class="qty-btn" onclick="changeQty('${k.replace(/'/g,"\\'")}',1)">+</button></div><div class="cart-price-total">€${it.toFixed(2)}</div></div>`; 
             } 
             document.getElementById('cart-total').innerText = "€ " + t.toFixed(2); document.getElementById('nav-cart-count').innerText = ti; localStorage.setItem('frietCartV3', JSON.stringify(cart)); 
         }
         function changeQty(k, d) { cart[k].qty += d; if(cart[k].qty <= 0) delete cart[k]; updateUI(); }
 
-        // --- 4. OPENINGSTIJDEN & PRE-ORDER LOGICA ---
-        const schedule = { 1: null, 2: {s:1130,e:2200}, 3: {s:1130,e:2200}, 4: {s:1130,e:2200}, 5: {s:1130,e:2330}, 6: {s:1200,e:2330}, 0: {s:1200,e:2330} };
+        // TIJD LOGICA
+        const schedule = { 1: {s:1130,e:2200}, 2: {s:1130,e:2200}, 3: {s:1130,e:2200}, 4: {s:1130,e:2200}, 5: {s:1130,e:2330}, 6: {s:1200,e:2330}, 0: {s:1200,e:2330} };
         const dayNames = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
 
         function generateDays() {
-            const sel = document.getElementById('pickupDay');
-            sel.innerHTML = "";
+            const sel = document.getElementById('pickupDay'); sel.innerHTML = "";
             for(let i = 0; i < 4; i++) {
                 let d = new Date(); d.setDate(d.getDate() + i);
-                if(schedule[d.getDay()]) { // Alleen dagen toevoegen dat we open zijn
-                    let name = (i === 0) ? "Vandaag" : (i === 1) ? "Morgen" : dayNames[d.getDay()];
-                    sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
-                }
+                let name = (i === 0) ? "Vandaag" : (i === 1) ? "Morgen" : dayNames[d.getDay()];
+                sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
             }
             generateTimes();
         }
 
         function generateTimes() {
-            const daySel = document.getElementById('pickupDay');
-            const timeSel = document.getElementById('pickupTime');
-            const selectedDayNum = parseInt(daySel.value);
-            const hours = schedule[selectedDayNum];
-            
-            timeSel.innerHTML = "";
-            let now = new Date();
-            let startMins = hours.s;
-            
-            // Als het vandaag is, begin dan pas over 20 minuten vanaf nu
-            if(now.getDay() === selectedDayNum) {
-                let currentTotalMins = (now.getHours() * 100) + now.getMinutes() + 20;
-                if(currentTotalMins > startMins) startMins = currentTotalMins;
-            }
-
+            const daySel = document.getElementById('pickupDay'); const timeSel = document.getElementById('pickupTime');
+            const selectedDayNum = parseInt(daySel.value); const hours = schedule[selectedDayNum];
+            timeSel.innerHTML = ""; let now = new Date(); let startMins = hours.s;
+            if(now.getDay() === selectedDayNum) { let current = (now.getHours() * 100) + now.getMinutes() + 20; if(current > startMins) startMins = current; }
             for(let h = Math.floor(startMins/100); h < Math.floor(hours.e/100); h++) {
-                for(let m of ["00", "30"]) {
-                    let total = (h * 100) + parseInt(m);
-                    if(total >= startMins && total <= hours.e) {
-                        timeSel.innerHTML += `<option value="${h}:${m}">${h}:${m}</option>`;
-                    }
-                }
+                for(let m of ["00", "30"]) { let total = (h * 100) + parseInt(m); if(total >= startMins && total <= hours.e) timeSel.innerHTML += `<option value="${h}:${m}">${h}:${m} uur</option>`; }
             }
-            
-            if(timeSel.innerHTML === "") {
-                timeSel.innerHTML = "<option>Geen tijden beschikbaar</option>";
-            }
+            if(timeSel.innerHTML === "") timeSel.innerHTML = "<option>Geen tijden beschikbaar</option>";
             checkStoreStatus();
         }
 
@@ -297,46 +311,32 @@
             const now = new Date(), day = now.getDay(), time = now.getHours()*100 + now.getMinutes(), hours = schedule[day];
             const isOpen = hours && time >= hours.s && time <= hours.e;
             const badge = document.getElementById('shop-status'), btn = document.getElementById('checkoutBtn');
-            
             badge.innerText = isOpen ? "● Keuken is OPEN" : "● Nu gesloten: PRE-ORDER";
             badge.className = "status-badge " + (isOpen ? "status-open" : "status-preorder");
             btn.innerText = isOpen ? "Bestelling Plaatsen" : "Pre-order Plaatsen";
         }
 
-        // --- 5. CHECKOUT & ADMIN ---
         function processCheckout() {
-            const n = document.getElementById('custName').value.trim();
-            const t = document.getElementById('pickupTime').value;
-            if(!n || !Object.keys(cart).length || t.includes("Geen")) return alert("Naam, mandje of tijd niet correct!");
-            
+            const n = document.getElementById('custName').value.trim(); const t = document.getElementById('pickupTime').value;
+            if(!n || !Object.keys(cart).length || t.includes("Geen")) return alert("Vul je naam in en kies een ophaaltijd!");
             const dayText = document.getElementById('pickupDay').options[document.getElementById('pickupDay').selectedIndex].text;
             const oid = "FP-" + Math.floor(Math.random()*9000+1000);
-            
-            database.ref('keuken_orders/'+oid).set({
-                customer: n,
-                timeRequested: dayText + " om " + t,
-                notes: document.getElementById('custNotes').value,
-                items: cart,
-                total: document.getElementById('cart-total').innerText,
-                timestamp: new Date().toLocaleTimeString()
-            }).then(() => { alert("Live verzonden!"); cart={}; document.getElementById('custName').value=""; updateUI(); });
+            database.ref('keuken_orders/'+oid).set({ customer: n, timeRequested: dayText + " om " + t, notes: document.getElementById('custNotes').value, items: cart, total: document.getElementById('cart-total').innerText, timestamp: new Date().toLocaleTimeString() })
+            .then(() => { alert("Gelukt! Je bestelling is live naar de keuken gestuurd."); cart={}; document.getElementById('custName').value=""; updateUI(); });
         }
 
         database.ref('keuken_orders').on('value', (s) => {
-            const c = document.getElementById('admin-orders-container'), d = s.val();
-            if(!d) { c.innerHTML = "<p>Geen bestellingen.</p>"; return; }
+            const c = document.getElementById('admin-orders-container'), d = s.val(); if(!d) { c.innerHTML = "<p style='text-align:center; padding:20px;'>Geen actieve bestellingen.</p>"; return; }
             c.innerHTML = ""; Object.keys(d).reverse().forEach(k => {
-                let o = d[k], il = "<ul>"; for(let ik in o.items) il += `<li>${o.items[ik].qty}x ${ik}</li>`; il += "</ul>";
-                c.innerHTML += `<div class="order-card"><div style="display:flex;justify-content:space-between;"><strong>#${k}</strong><span>${o.timestamp}</span></div><div><strong>${o.customer}</strong> (${o.timeRequested})<br>${il}</div><div style="text-align:right;font-weight:800;color:var(--retro-rood);">${o.total}</div></div>`;
+                let o = d[k], il = "<ul>"; for(let ik in o.items) { let opt = o.items[ik].optionsText ? ` <span style="font-size:0.85em; font-style:italic; color:#777;">(${o.items[ik].optionsText})</span>` : ""; il += `<li><strong>${o.items[ik].qty}x</strong> ${o.items[ik].baseName}${opt}</li>`; } il += "</ul>";
+                c.innerHTML += `<div class="order-card"><div style="display:flex;justify-content:space-between;border-bottom:1px dashed #ccc;padding-bottom:10px;margin-bottom:10px;"><strong>#${k}</strong><span>${o.timestamp}</span></div><div><strong>Klant: ${o.customer}</strong><br>Ophalen: ${o.timeRequested}<br>${il}</div><div style="text-align:right;font-weight:800;color:var(--retro-rood);font-size:1.3em;">${o.total}</div></div>`;
             });
         });
 
-        // Footer tijden genereren
         const f = document.getElementById('footer-hours');
-        const footerSchedule = ["Zondag: 12:00-23:30","Maandag: Gesloten","Dinsdag: 11:30-22:00","Woensdag: 11:30-22:00","Donderdag: 11:30-22:00","Vrijdag: 11:30-23:30","Zaterdag: 12:00-23:30"];
-        footerSchedule.forEach(s => f.innerHTML += `<li>${s}</li>`);
+        const footerHours = ["Zondag: 12:00-23:30","Maandag: 11:30-22:00","Dinsdag: 11:30-22:00","Woensdag: 11:30-22:00","Donderdag: 11:30-22:00","Vrijdag: 11:30-23:30","Zaterdag: 12:00-23:30"];
+        footerHours.forEach(s => f.innerHTML += `<li>${s}</li>`);
 
-        // Startup
         updateUI(); generateDays(); setInterval(checkStoreStatus, 60000);
     </script>
 </body>
