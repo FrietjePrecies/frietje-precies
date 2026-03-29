@@ -175,19 +175,28 @@
     </footer>
 
     <script>
-        // FIREBASE CONFIG
-        const firebaseConfig = {
-            apiKey: "AIzaSyAMxVandAaxV_4yvbXePt-UxlkIpXuKdOc",
-            authDomain: "frietje-precies-kw1c.firebaseapp.com",
-            databaseURL: "https://frietje-precies-kw1c-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "frietje-precies-kw1c",
-            storageBucket: "frietje-precies-kw1c.firebasestorage.app",
-            messagingSenderId: "693541468339",
-            appId: "1:693541468339:web:b8fb1c3f22b40f471c58c6",
-            measurementId: "G-LGW7ERH5K2"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+        // --- VEILIGE FIREBASE START (ADBLOCK PROOF) ---
+        let database = null;
+        try {
+            const firebaseConfig = {
+                apiKey: "AIzaSyAMxVandAaxV_4yvbXePt-UxlkIpXuKdOc",
+                authDomain: "frietje-precies-kw1c.firebaseapp.com",
+                databaseURL: "https://frietje-precies-kw1c-default-rtdb.europe-west1.firebasedatabase.app",
+                projectId: "frietje-precies-kw1c",
+                storageBucket: "frietje-precies-kw1c.firebasestorage.app",
+                messagingSenderId: "693541468339",
+                appId: "1:693541468339:web:b8fb1c3f22b40f471c58c6",
+                measurementId: "G-LGW7ERH5K2"
+            };
+            if(typeof firebase !== 'undefined') {
+                firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+            } else {
+                console.warn("Firebase geblokkeerd door Adblocker.");
+            }
+        } catch(e) {
+            console.error("Fout bij laden database:", e);
+        }
 
         // DE VOLLEDIGE MENU DATABASE
         const menuData = {
@@ -291,7 +300,6 @@
             
             while(daysAdded < 4) {
                 let d = new Date(); d.setDate(d.getDate() + offset);
-                // Check of we open zijn op die dag (niet null)
                 if(schedule[d.getDay()] !== null) {
                     let name = (offset === 0) ? "Vandaag" : (offset === 1) ? "Morgen" : dayNames[d.getDay()];
                     sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
@@ -324,12 +332,16 @@
         }
 
         function processCheckout() {
+            if (!database) {
+                alert("Oeps! Je browser of Adblocker blokkeert het bestelsysteem. Zet je Adblocker of strenge privacy instellingen even uit voor deze website en herlaad de pagina.");
+                return;
+            }
+
             const n = document.getElementById('custName').value.trim(); const t = document.getElementById('pickupTime').value;
             if(!n || !Object.keys(cart).length || t.includes("Geen")) return alert("Vul je naam in en kies een ophaaltijd!");
             const dayText = document.getElementById('pickupDay').options[document.getElementById('pickupDay').selectedIndex].text;
             const oid = "FP-" + Math.floor(Math.random()*9000+1000);
             
-            // DATUM EN TIJD TOEGEVOEGD
             const now = new Date();
             const fullTimestamp = now.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) + ' om ' + now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
 
@@ -344,16 +356,26 @@
             .then(() => { alert("Gelukt! Je bestelling is live naar de keuken gestuurd."); cart={}; document.getElementById('custName').value=""; updateUI(); });
         }
 
-        database.ref('keuken_orders').on('value', (s) => {
-            const c = document.getElementById('admin-orders-container'), d = s.val(); if(!d) { c.innerHTML = "<p style='text-align:center; padding:20px;'>Geen actieve bestellingen.</p>"; return; }
-            c.innerHTML = ""; Object.keys(d).reverse().forEach(k => {
-                let o = d[k], il = "<ul>"; for(let ik in o.items) { let opt = o.items[ik].optionsText ? ` <span style="font-size:0.85em; font-style:italic; color:#777;">(${o.items[ik].optionsText})</span>` : ""; il += `<li><strong>${o.items[ik].qty}x</strong> ${o.items[ik].baseName}${opt}</li>`; } il += "</ul>";
-                c.innerHTML += `<div class="order-card"><div style="display:flex;justify-content:space-between;border-bottom:1px dashed #ccc;padding-bottom:10px;margin-bottom:10px;"><strong>#${k}</strong><span>${o.timestamp}</span></div><div><strong>Klant: ${o.customer}</strong><br>Ophalen: ${o.timeRequested}<br>${il}</div><div style="text-align:right;font-weight:800;color:var(--retro-rood);font-size:1.3em;">${o.total}</div></div>`;
+        if (database) {
+            database.ref('keuken_orders').on('value', (s) => {
+                const c = document.getElementById('admin-orders-container'), d = s.val(); if(!d) { c.innerHTML = "<p style='text-align:center; padding:20px;'>Geen actieve bestellingen.</p>"; return; }
+                c.innerHTML = ""; Object.keys(d).reverse().forEach(k => {
+                    let o = d[k], il = "<ul>"; for(let ik in o.items) { let opt = o.items[ik].optionsText ? ` <span style="font-size:0.85em; font-style:italic; color:#777;">(${o.items[ik].optionsText})</span>` : ""; il += `<li><strong>${o.items[ik].qty}x</strong> ${o.items[ik].baseName}${opt}</li>`; } il += "</ul>";
+                    c.innerHTML += `<div class="order-card"><div style="display:flex;justify-content:space-between;border-bottom:1px dashed #ccc;padding-bottom:10px;margin-bottom:10px;"><strong>#${k}</strong><span>${o.timestamp}</span></div><div><strong>Klant: ${o.customer}</strong><br>Ophalen: ${o.timeRequested}<br>${il}</div><div style="text-align:right;font-weight:800;color:var(--retro-rood);font-size:1.3em;">${o.total}</div></div>`;
+                });
             });
-        });
+        }
 
         const f = document.getElementById('footer-hours');
-        const footerHours = ["Zondag: 12:00-23:30","Maandag: Gesloten","Dinsdag: 11:30-22:00","Woensdag: 11:30-22:00","Donderdag: 11:30-22:00","Vrijdag: 11:30-23:30","Zaterdag: 12:00-23:30"];
+        const footerHours = [
+            "Maandag: Gesloten",
+            "Dinsdag: 11:30-22:00",
+            "Woensdag: 11:30-22:00",
+            "Donderdag: 11:30-22:00",
+            "Vrijdag: 11:30-23:30",
+            "Zaterdag: 12:00-23:30",
+            "Zondag: 12:00-23:30"
+        ];
         footerHours.forEach(s => f.innerHTML += `<li>${s}</li>`);
 
         updateUI(); generateDays(); setInterval(checkStoreStatus, 60000);
