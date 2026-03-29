@@ -189,7 +189,7 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // DE VOLLEDIGE MENU DATABASE (ALLE OPTIES HERSTELD)
+        // DE VOLLEDIGE MENU DATABASE
         const menuData = {
             'friet': { 
                 name: 'Oud-Hollandse Puntzak', basePrice: 3.50, 
@@ -281,16 +281,23 @@
         }
         function changeQty(k, d) { cart[k].qty += d; if(cart[k].qty <= 0) delete cart[k]; updateUI(); }
 
-        // TIJD LOGICA
-        const schedule = { 1: {s:1130,e:2200}, 2: {s:1130,e:2200}, 3: {s:1130,e:2200}, 4: {s:1130,e:2200}, 5: {s:1130,e:2330}, 6: {s:1200,e:2330}, 0: {s:1200,e:2330} };
+        // TIJD LOGICA (Met Maandag gesloten)
+        const schedule = { 1: null, 2: {s:1130,e:2200}, 3: {s:1130,e:2200}, 4: {s:1130,e:2200}, 5: {s:1130,e:2330}, 6: {s:1200,e:2330}, 0: {s:1200,e:2330} };
         const dayNames = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
 
         function generateDays() {
             const sel = document.getElementById('pickupDay'); sel.innerHTML = "";
-            for(let i = 0; i < 4; i++) {
-                let d = new Date(); d.setDate(d.getDate() + i);
-                let name = (i === 0) ? "Vandaag" : (i === 1) ? "Morgen" : dayNames[d.getDay()];
-                sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
+            let daysAdded = 0; let offset = 0;
+            
+            while(daysAdded < 4) {
+                let d = new Date(); d.setDate(d.getDate() + offset);
+                // Check of we open zijn op die dag (niet null)
+                if(schedule[d.getDay()] !== null) {
+                    let name = (offset === 0) ? "Vandaag" : (offset === 1) ? "Morgen" : dayNames[d.getDay()];
+                    sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
+                    daysAdded++;
+                }
+                offset++;
             }
             generateTimes();
         }
@@ -334,7 +341,7 @@
         });
 
         const f = document.getElementById('footer-hours');
-        const footerHours = ["Zondag: 12:00-23:30","Maandag: 11:30-22:00","Dinsdag: 11:30-22:00","Woensdag: 11:30-22:00","Donderdag: 11:30-22:00","Vrijdag: 11:30-23:30","Zaterdag: 12:00-23:30"];
+        const footerHours = ["Zondag: 12:00-23:30","Maandag: Gesloten","Dinsdag: 11:30-22:00","Woensdag: 11:30-22:00","Donderdag: 11:30-22:00","Vrijdag: 11:30-23:30","Zaterdag: 12:00-23:30"];
         footerHours.forEach(s => f.innerHTML += `<li>${s}</li>`);
 
         updateUI(); generateDays(); setInterval(checkStoreStatus, 60000);
