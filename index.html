@@ -14,7 +14,6 @@
     <style>
         :root { --retro-creme: #fcf9f2; --retro-oranje: #e68a00; --retro-rood: #c21807; --donker-tekst: #2c2a29; --licht-grijs: #f4f4f4; --succes-groen: #2ecc71; --goud-geel: #ffc107; }
         
-        /* Globale fix tegen de witte balk aan de zijkant op mobiel */
         html, body { scroll-behavior: smooth; font-family: 'Montserrat', sans-serif; background-color: var(--retro-creme); color: var(--donker-tekst); margin: 0; padding: 0; max-width: 100vw; overflow-x: hidden; }
         
         h1, h2, h3, h4, .logo-text { font-family: 'Lobster', cursive; color: var(--retro-oranje); letter-spacing: 1.5px; margin-top: 0; }
@@ -91,12 +90,17 @@
 
         @keyframes kenBurns { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
         
-        /* FIX VOOR MOBIEL */
+        /* FIX VOOR MOBIEL (Responsiveness) */
         @media (max-width: 768px) { 
             nav { padding: 12px 20px; }
             nav ul { display: none; } 
             .hero h1 { font-size: 2.8em; } 
-            .order-grid { grid-template-columns: 1fr; } 
+            .order-grid { grid-template-columns: 1fr; gap: 20px; } 
+            .glass-panel { padding: 20px; } /* Minder witte rand op telefoons = meer ruimte voor tekst */
+            
+            /* Zorg dat het winkelmandje netjes naar de volgende regel wikkelt */
+            .cart-item { flex-wrap: wrap; } 
+            .cart-item-info { width: 100%; margin-bottom: 10px; }
         }
     </style>
 </head>
@@ -217,17 +221,17 @@
 
     <script>
         // =========================================================================
-        // 1. FIREBASE CONFIGURATIE (JOUW ECHTE GEGEVENS ZIJN INGEVULD!)
+        // 1. FIREBASE CONFIGURATIE 
         // =========================================================================
         const firebaseConfig = {
-            apiKey: "AIzaSyAMxVandAaxV_4yvbXePt-UxlkIpXuKdOc",
-            authDomain: "frietje-precies-kw1c.firebaseapp.com",
-            databaseURL: "https://frietje-precies-kw1c-default-rtdb.europe-west1.firebasedatabase.app",
-            projectId: "frietje-precies-kw1c",
-            storageBucket: "frietje-precies-kw1c.firebasestorage.app",
-            messagingSenderId: "693541468339",
-            appId: "1:693541468339:web:b8fb1c3f22b40f471c58c6",
-            measurementId: "G-LGW7ERH5K2"
+            // ---> PLAK HIER JOUW EIGEN FIREBASE CODE! <---
+            apiKey: "JOUW_API_KEY",
+            authDomain: "JOUW_PROJECT_ID.firebaseapp.com",
+            databaseURL: "https://JOUW_PROJECT_ID-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "JOUW_PROJECT_ID",
+            storageBucket: "JOUW_PROJECT_ID.appspot.com",
+            messagingSenderId: "JOUW_SENDER_ID",
+            appId: "JOUW_APP_ID"
         };
         
         // Start Firebase
