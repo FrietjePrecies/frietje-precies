@@ -328,7 +328,19 @@
             if(!n || !Object.keys(cart).length || t.includes("Geen")) return alert("Vul je naam in en kies een ophaaltijd!");
             const dayText = document.getElementById('pickupDay').options[document.getElementById('pickupDay').selectedIndex].text;
             const oid = "FP-" + Math.floor(Math.random()*9000+1000);
-            database.ref('keuken_orders/'+oid).set({ customer: n, timeRequested: dayText + " om " + t, notes: document.getElementById('custNotes').value, items: cart, total: document.getElementById('cart-total').innerText, timestamp: new Date().toLocaleTimeString() })
+            
+            // DATUM EN TIJD TOEGEVOEGD
+            const now = new Date();
+            const fullTimestamp = now.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) + ' om ' + now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+            database.ref('keuken_orders/'+oid).set({ 
+                customer: n, 
+                timeRequested: dayText + " om " + t, 
+                notes: document.getElementById('custNotes').value, 
+                items: cart, 
+                total: document.getElementById('cart-total').innerText, 
+                timestamp: fullTimestamp 
+            })
             .then(() => { alert("Gelukt! Je bestelling is live naar de keuken gestuurd."); cart={}; document.getElementById('custName').value=""; updateUI(); });
         }
 
