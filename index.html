@@ -290,22 +290,36 @@
         }
         function changeQty(k, d) { cart[k].qty += d; if(cart[k].qty <= 0) delete cart[k]; updateUI(); }
 
-        // TIJD LOGICA (Met Maandag gesloten)
-        const schedule = { 1: null, 2: {s:1130,e:2200}, 3: {s:1130,e:2200}, 4: {s:1130,e:2200}, 5: {s:1130,e:2330}, 6: {s:1200,e:2330}, 0: {s:1200,e:2330} };
+        // TIJD LOGICA (Elke dag open, van 12:00 tot 02:00 de volgende nacht)
+        const schedule = { 
+            0: {s:1200,e:2600}, // Zondag
+            1: {s:1200,e:2600}, // Maandag
+            2: {s:1200,e:2600}, // Dinsdag
+            3: {s:1200,e:2600}, // Woensdag
+            4: {s:1200,e:2600}, // Donderdag
+            5: {s:1200,e:2600}, // Vrijdag
+            6: {s:1200,e:2600}  // Zaterdag
+        };
         const dayNames = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
+
+        // Slimme 'Business Day' (nacht is onderdeel van de vorige dag)
+        function getBusinessDate() {
+            let d = new Date();
+            if (d.getHours() < 5) d.setDate(d.getDate() - 1);
+            return d;
+        }
 
         function generateDays() {
             const sel = document.getElementById('pickupDay'); sel.innerHTML = "";
-            let daysAdded = 0; let offset = 0;
+            let bizNow = getBusinessDate();
             
-            while(daysAdded < 4) {
-                let d = new Date(); d.setDate(d.getDate() + offset);
+            for(let i = 0; i < 4; i++) {
+                let d = new Date(bizNow); 
+                d.setDate(d.getDate() + i);
                 if(schedule[d.getDay()] !== null) {
-                    let name = (offset === 0) ? "Vandaag" : (offset === 1) ? "Morgen" : dayNames[d.getDay()];
+                    let name = (i === 0) ? "Vandaag" : (i === 1) ? "Morgen" : dayNames[d.getDay()];
                     sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
-                    daysAdded++;
                 }
-                offset++;
             }
             generateTimes();
         }
@@ -313,17 +327,42 @@
         function generateTimes() {
             const daySel = document.getElementById('pickupDay'); const timeSel = document.getElementById('pickupTime');
             const selectedDayNum = parseInt(daySel.value); const hours = schedule[selectedDayNum];
-            timeSel.innerHTML = ""; let now = new Date(); let startMins = hours.s;
-            if(now.getDay() === selectedDayNum) { let current = (now.getHours() * 100) + now.getMinutes() + 20; if(current > startMins) startMins = current; }
+            timeSel.innerHTML = ""; 
+            
+            let realNow = new Date();
+            let hNow = realNow.getHours();
+            if(hNow < 5) hNow += 24; // Uren na middernacht tellen door (01:00 = 25:00)
+            let startMins = hours.s;
+            
+            let bizNow = getBusinessDate();
+            if(bizNow.getDay() === selectedDayNum) { 
+                let current = (hNow * 100) + realNow.getMinutes() + 20; 
+                if(current > startMins) startMins = current; 
+            }
+            
             for(let h = Math.floor(startMins/100); h < Math.floor(hours.e/100); h++) {
-                for(let m of ["00", "30"]) { let total = (h * 100) + parseInt(m); if(total >= startMins && total <= hours.e) timeSel.innerHTML += `<option value="${h}:${m}">${h}:${m} uur</option>`; }
+                for(let m of ["00", "30"]) { 
+                    let total = (h * 100) + parseInt(m); 
+                    if(total >= startMins && total <= hours.e) {
+                        let dispH = h % 24;
+                        let dispHStr = dispH < 10 ? "0" + dispH : dispH;
+                        timeSel.innerHTML += `<option value="${dispHStr}:${m}">${dispHStr}:${m} uur</option>`; 
+                    }
+                }
             }
             if(timeSel.innerHTML === "") timeSel.innerHTML = "<option>Geen tijden beschikbaar</option>";
             checkStoreStatus();
         }
 
         function checkStoreStatus() {
-            const now = new Date(), day = now.getDay(), time = now.getHours()*100 + now.getMinutes(), hours = schedule[day];
+            let bizDay = getBusinessDate();
+            let d = new Date();
+            let h = d.getHours();
+            if(h < 5) h += 24; // 01:00 wordt 25:00 voor de check
+            let time = h * 100 + d.getMinutes();
+            let day = bizDay.getDay();
+            let hours = schedule[day];
+
             const isOpen = hours && time >= hours.s && time <= hours.e;
             const badge = document.getElementById('shop-status'), btn = document.getElementById('checkoutBtn');
             badge.innerText = isOpen ? "● Keuken is OPEN" : "● Nu gesloten: PRE-ORDER";
@@ -368,13 +407,13 @@
 
         const f = document.getElementById('footer-hours');
         const footerHours = [
-            "Maandag: Gesloten",
-            "Dinsdag: 11:30-22:00",
-            "Woensdag: 11:30-22:00",
-            "Donderdag: 11:30-22:00",
-            "Vrijdag: 11:30-23:30",
-            "Zaterdag: 12:00-23:30",
-            "Zondag: 12:00-23:30"
+            "Maandag: 12:00 - 02:00",
+            "Dinsdag: 12:00 - 02:00",
+            "Woensdag: 12:00 - 02:00",
+            "Donderdag: 12:00 - 02:00",
+            "Vrijdag: 12:00 - 02:00",
+            "Zaterdag: 12:00 - 02:00",
+            "Zondag: 12:00 - 02:00"
         ];
         footerHours.forEach(s => f.innerHTML += `<li>${s}</li>`);
 
