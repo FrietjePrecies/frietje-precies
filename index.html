@@ -57,6 +57,8 @@
         .cart-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
         .cart-price-total { font-weight: bold; width: 70px; text-align: right; flex-shrink: 0; }
         .qty-btn { background: #eee; border: none; width: 30px; height: 30px; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn-empty { background: none; border: 1px solid #ccc; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.85em; color: #666; transition: 0.2s; font-weight: bold;}
+        .btn-empty:hover { background: #fee; color: var(--retro-rood); border-color: var(--retro-rood); }
         
         .form-group { margin-bottom: 20px; }
         .form-group label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9em; }
@@ -141,7 +143,12 @@
         <div class="order-grid">
             <div class="glass-panel">
                 <div id="shop-status" class="status-badge">Checken...</div>
-                <h3>Winkelmandje 🛒</h3>
+                
+                <div style="display:flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 style="margin:0;">Winkelmandje 🛒</h3>
+                    <button class="btn-empty" onclick="emptyCart()"><i class="fas fa-trash"></i> Legen</button>
+                </div>
+                
                 <div id="cart-container"></div>
                 <hr><div style="font-size: 1.8em; font-weight: 800; display:flex; justify-content: space-between; color: var(--retro-rood);"><span>Totaal:</span><span id="cart-total">€ 0,00</span></div>
             </div>
@@ -275,20 +282,40 @@
             closeModal(); showToast("✔ Toegevoegd aan dienblad!");
         }
 
-        // WINKELMANDJE
-        let cart = JSON.parse(localStorage.getItem('frietCartV3')) || {};
+        // WINKELMANDJE LOGICA
+        let cart = JSON.parse(sessionStorage.getItem('frietCartV3')) || {};
+        
         function showToast(m) { const t = document.getElementById('toast'); t.innerText = m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2000); }
         function addToCartLogic(k, n, o, p) { if(cart[k]) cart[k].qty++; else cart[k] = { baseName:n, optionsText:o, price:p, qty:1 }; updateUI(); }
+        
         function updateUI() { 
             const c = document.getElementById('cart-container'); let t = 0, ti = 0; c.innerHTML = ""; 
-            if(!Object.keys(cart).length) { c.innerHTML = "<p style='color:#888;'>Je dienblad is nog leeg.</p>"; document.getElementById('cart-total').innerText = "€ 0,00"; document.getElementById('nav-cart-count').innerText = "0"; return; } 
+            if(!Object.keys(cart).length) { 
+                c.innerHTML = "<p style='color:#888; font-style:italic;'>Je dienblad is nog leeg.</p>"; 
+                document.getElementById('cart-total').innerText = "€ 0,00"; 
+                document.getElementById('nav-cart-count').innerText = "0"; 
+                sessionStorage.setItem('frietCartV3', JSON.stringify({}));
+                return; 
+            } 
             for(let k in cart) { 
                 let d = cart[k], it = d.price * d.qty; t += it; ti += d.qty; 
                 c.innerHTML += `<div class="cart-item"><div class="cart-item-info"><strong>${d.baseName}</strong><br><small style="color:#666;">${d.optionsText}</small></div><div class="cart-controls"><button class="qty-btn" onclick="changeQty('${k.replace(/'/g,"\\'")}',-1)">-</button> <strong>${d.qty}</strong> <button class="qty-btn" onclick="changeQty('${k.replace(/'/g,"\\'")}',1)">+</button></div><div class="cart-price-total">€${it.toFixed(2)}</div></div>`; 
             } 
-            document.getElementById('cart-total').innerText = "€ " + t.toFixed(2); document.getElementById('nav-cart-count').innerText = ti; localStorage.setItem('frietCartV3', JSON.stringify(cart)); 
+            document.getElementById('cart-total').innerText = "€ " + t.toFixed(2); 
+            document.getElementById('nav-cart-count').innerText = ti; 
+            sessionStorage.setItem('frietCartV3', JSON.stringify(cart)); 
         }
         function changeQty(k, d) { cart[k].qty += d; if(cart[k].qty <= 0) delete cart[k]; updateUI(); }
+        
+        // NIEUW: Functie om het hele mandje in één keer te legen
+        function emptyCart() {
+            if(Object.keys(cart).length === 0) return; // Mandje is al leeg
+            if(confirm("Weet je zeker dat je alle producten uit je mandje wilt verwijderen?")) {
+                cart = {};
+                updateUI();
+                showToast("🗑️ Mandje is leeggemaakt!");
+            }
+        }
 
         // TIJD LOGICA (Elke dag open, van 12:00 tot 02:00 de volgende nacht)
         const schedule = { 
