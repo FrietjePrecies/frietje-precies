@@ -274,16 +274,13 @@
             return t; 
         }
 
-        // --- FILTER VASTGEBOUWD VOOR FIREBASE PROBLEMEN ---
+        // FILTER VASTGEBOUWD VOOR FIREBASE PROBLEMEN (Dr. Pepper fix)
         function confirmAddToCart() {
             let opts = []; document.querySelectorAll('#modalContent input:checked').forEach(i => { 
                 if(i.value !== "Geen saus" && i.value !== "Alleen Burger" && i.value !== "Alleen de burger") opts.push(i.value); 
             });
             
-            // We creëren een unieke naam voor in het winkelmandje
             let rawKey = currentProduct.name + (opts.length ? " | " + opts.join(', ') : "");
-            
-            // DIT IS DE FIX VOOR DR. PEPPER (verwijder puntjes en andere gekke tekens die Firebase haat)
             let safeKey = rawKey.replace(/[.#$\[\]\/]/g, ''); 
 
             addToCartLogic(safeKey, currentProduct.name, opts.join(', '), updateModalPrice());
@@ -324,15 +321,123 @@
 
         // TIJD LOGICA (Elke dag open, van 12:00 tot 02:00 de volgende nacht)
         const schedule = { 
-            0: {s:1200,e:2600}, // Zondag
-            1: {s:1200,e:2600}, // Maandag
-            2: {s:1200,e:2600}, // Dinsdag
-            3: {s:1200,e:2600}, // Woensdag
-            4: {s:1200,e:2600}, // Donderdag
-            5: {s:1200,e:2600}, // Vrijdag
-            6: {s:1200,e:2600}  // Zaterdag
+            0: {s:1200,e:2600}, 1: {s:1200,e:2600}, 2: {s:1200,e:2600}, 
+            3: {s:1200,e:2600}, 4: {s:1200,e:2600}, 5: {s:1200,e:2600}, 6: {s:1200,e:2600} 
         };
         const dayNames = ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"];
 
         function getBusinessDate() {
-            let
+            let d = new Date(); if (d.getHours() < 5) d.setDate(d.getDate() - 1); return d;
+        }
+
+        function generateDays() {
+            const sel = document.getElementById('pickupDay'); sel.innerHTML = "";
+            let bizNow = getBusinessDate();
+            for(let i = 0; i < 4; i++) {
+                let d = new Date(bizNow); d.setDate(d.getDate() + i);
+                if(schedule[d.getDay()] !== null) {
+                    let name = (i === 0) ? "Vandaag" : (i === 1) ? "Morgen" : dayNames[d.getDay()];
+                    sel.innerHTML += `<option value="${d.getDay()}">${name} (${d.toLocaleDateString('nl-NL', {day:'numeric', month:'short'})})</option>`;
+                }
+            }
+            generateTimes();
+        }
+
+        function generateTimes() {
+            const daySel = document.getElementById('pickupDay'); const timeSel = document.getElementById('pickupTime');
+            const selectedDayNum = parseInt(daySel.value); const hours = schedule[selectedDayNum];
+            timeSel.innerHTML = ""; 
+            
+            let realNow = new Date(); let hNow = realNow.getHours();
+            if(hNow < 5) hNow += 24; 
+            let startMins = hours.s;
+            
+            let bizNow = getBusinessDate();
+            if(bizNow.getDay() === selectedDayNum) { 
+                let current = (hNow * 100) + realNow.getMinutes() + 20; 
+                if(current > startMins) startMins = current; 
+            }
+            
+            for(let h = Math.floor(startMins/100); h < Math.floor(hours.e/100); h++) {
+                for(let m of ["00", "30"]) { 
+                    let total = (h * 100) + parseInt(m); 
+                    if(total >= startMins && total <= hours.e) {
+                        let dispH = h % 24;
+                        let dispHStr = dispH < 10 ? "0" + dispH : dispH;
+                        timeSel.innerHTML += `<option value="${dispHStr}:${m}">${dispHStr}:${m} uur</option>`; 
+                    }
+                }
+            }
+            if(timeSel.innerHTML === "") timeSel.innerHTML = "<option>Geen tijden beschikbaar</option>";
+            checkStoreStatus();
+        }
+
+        function checkStoreStatus() {
+            let bizDay = getBusinessDate(); let d = new Date(); let h = d.getHours();
+            if(h < 5) h += 24; let time = h * 100 + d.getMinutes(); let day = bizDay.getDay(); let hours = schedule[day];
+            const isOpen = hours && time >= hours.s && time <= hours.e;
+            const badge = document.getElementById('shop-status'), btn = document.getElementById('checkoutBtn');
+            badge.innerText = isOpen ? "● Keuken is OPEN" : "● Nu gesloten: PRE-ORDER";
+            badge.className = "status-badge " + (isOpen ? "status-open" : "status-preorder");
+            btn.innerText = isOpen ? "Bestelling Plaatsen" : "Pre-order Plaatsen";
+        }
+
+        function processCheckout() {
+            if (!database) {
+                alert("Oeps! Je browser of Adblocker blokkeert het bestelsysteem. Zet je Adblocker of strenge privacy instellingen even uit voor deze website en herlaad de pagina.");
+                return;
+            }
+
+            const n = document.getElementById('custName').value.trim(); const t = document.getElementById('pickupTime').value;
+            if(!n || !Object.keys(cart).length || t.includes("Geen")) return alert("Vul je naam in en kies een ophaaltijd!");
+            
+            const dayText = document.getElementById('pickupDay').options[document.getElementById('pickupDay').selectedIndex].text;
+            const oid = "FP-" + Math.floor(Math.random()*9000+1000);
+            
+            const now = new Date();
+            const fullTimestamp = now.toLocaleDateString('nl-NL', { day: 'numeric', month: 'short', year: 'numeric' }) + ' om ' + now.toLocaleTimeString('nl-NL', { hour: '2-digit', minute: '2-digit' });
+
+            database.ref('keuken_orders/'+oid).set({ 
+                customer: n, 
+                timeRequested: dayText + " om " + t, 
+                notes: document.getElementById('custNotes').value, 
+                items: cart, 
+                total: document.getElementById('cart-total').innerText, 
+                timestamp: fullTimestamp 
+            })
+            .then(() => { 
+                alert("Gelukt! Je bestelling is live naar de keuken gestuurd."); 
+                cart={}; document.getElementById('custName').value=""; updateUI(); 
+            })
+            .catch((error) => {
+                alert("Er ging iets mis bij het doorgeven aan de keuken. Probeer het opnieuw! (Fout: " + error.message + ")");
+                console.error(error);
+            });
+        }
+
+        if (database) {
+            database.ref('keuken_orders').on('value', (s) => {
+                const c = document.getElementById('admin-orders-container'), d = s.val(); if(!d) { c.innerHTML = "<p style='text-align:center; padding:20px;'>Geen actieve bestellingen.</p>"; return; }
+                c.innerHTML = ""; Object.keys(d).reverse().forEach(k => {
+                    let o = d[k], il = "<ul>"; for(let ik in o.items) { let opt = o.items[ik].optionsText ? ` <span style="font-size:0.85em; font-style:italic; color:#777;">(${o.items[ik].optionsText})</span>` : ""; il += `<li><strong>${o.items[ik].qty}x</strong> ${o.items[ik].baseName}${opt}</li>`; } il += "</ul>";
+                    c.innerHTML += `<div class="order-card"><div style="display:flex;justify-content:space-between;border-bottom:1px dashed #ccc;padding-bottom:10px;margin-bottom:10px;"><strong>#${k}</strong><span>${o.timestamp}</span></div><div><strong>Klant: ${o.customer}</strong><br>Ophalen: ${o.timeRequested}<br>${il}</div><div style="text-align:right;font-weight:800;color:var(--retro-rood);font-size:1.3em;">${o.total}</div></div>`;
+                });
+            });
+        }
+
+        const f = document.getElementById('footer-hours');
+        const footerHours = [
+            "Maandag: 12:00 - 02:00",
+            "Dinsdag: 12:00 - 02:00",
+            "Woensdag: 12:00 - 02:00",
+            "Donderdag: 12:00 - 02:00",
+            "Vrijdag: 12:00 - 02:00",
+            "Zaterdag: 12:00 - 02:00",
+            "Zondag: 12:00 - 02:00"
+        ];
+        footerHours.forEach(s => f.innerHTML += `<li>${s}</li>`);
+
+        updateUI(); generateDays(); setInterval(checkStoreStatus, 60000);
+    </script>
+</body>
+</html>
